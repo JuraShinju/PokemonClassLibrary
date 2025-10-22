@@ -1,5 +1,6 @@
 using PokemonClassLibrary.Models;
 using PokemonClassLibrary.Services.BusinessLogicLayer;
+using System.Data;
 
 namespace PokemonTestProject
 {
@@ -76,6 +77,55 @@ namespace PokemonTestProject
             Assert.Equal(1, result);
             // Assert that cart contains the added Pokemon
             Assert.Contains(cart, verify => verify.Id == pokemon.Id);
+        }
+
+        /// <summary>
+        /// Test to verify that checkout returns the correct total and clears the cart.
+        /// </summary>
+        [Fact]
+        public void Checkout_ShouldReturnCorrectTotal_AndClearCart()
+        {
+            // Create store logic instance
+            StoreLogic store = new StoreLogic();
+
+            // Create first Pokemon
+            PokemonModel pokemon1 = new PokemonModel()
+            {
+                Id = 1,
+                Name = "Squirtle",
+                Type = "Water-type",
+                Price = 700m
+            };
+
+            // Create second Pokemon
+            PokemonModel pokemon2 = new PokemonModel()
+            {
+                Id = 2,
+                Name = "Dragonite",
+                Type = "Dragon-type",
+                Price = 2000m
+            };
+
+            // Add both Pokemon to inventory
+            store.AddPokemonToInventory(pokemon1);
+            store.AddPokemonToInventory(pokemon2);
+
+            // Add both Pokemon to cart
+            store.AddPokemonToCart(pokemon1.Id);
+            store.AddPokemontoCart(pokemon2.Id);
+
+            // Perform checkout
+            decimal total = store.Checkout();
+
+            // Get cart after checkout
+            List<PokemonModel> cartAfterCheckout = store.GetShoppingCart();
+
+            // Assert total is within expected range
+            Assert.True(total >= (pokemon1.Price + pokemon2.Price) * 0.95m);
+            Assert.True(total <= (pokemon1.Price + pokemon2.Price) * 1.05m);
+
+            // Assert cart is cleared
+            Assert.Empty(cartAfterCheckout);
         }
     }
 }
