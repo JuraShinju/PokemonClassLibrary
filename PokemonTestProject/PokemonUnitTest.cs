@@ -47,5 +47,35 @@ namespace PokemonTestProject
             // Assert that inventory is emtpy
             Assert.Empty(inventory);
         }
+
+        /// <summary>
+        /// Test to verify that a Pokemon is added to the cart when a valid ID is provided
+        /// </summary>
+        [Fact]
+        public void AddPokemonToCart_ShouldAddPokemon_WhenPokemonIdIsGiven()
+        {
+            // Create store logic instance
+            StoreLogic store = new StoreLogic();
+
+            // Create a Pokemon object
+            PokemonModel pokemon = new PokemonModel()
+            {
+                Id = 1,
+                Name = "Charmander",
+                Type = "Fire-type",
+                Price = 1000m
+            };
+
+            // Add Pokemon to inventory
+            store.AddPokemonToInventory(pokemon);
+            // Add Pokemon to cart using its ID
+            int result = store.AddPokemonToCart(pokemon.Id);
+            // Get current shopping cart
+            List<PokemonModel> cart = store.GetShoppingCart();
+            // Assert that returned ID matches expected
+            Assert.Equal(1, result);
+            // Assert that cart contains the added Pokemon
+            Assert.Contains(cart, verify => verify.Id == pokemon.Id);
+        }
     }
 }
