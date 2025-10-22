@@ -33,5 +33,19 @@ namespace PokemonTestProject
             // Check if inventory contains the added Pokemon
             Assert.Contains(pokemon, inventory);
         }
+
+        /// <summary>
+        /// Test to check if inventory is empty when no Pokemon is added.
+        /// </summary>
+        [Fact]
+        public void GetInventory_ShouldReturnEmptyList_WhenNoPokmenIsAdded()
+        {
+            // Create store logic instance
+            StoreLogic store = new StoreLogic();
+            // Get current inventory
+            List<PokemonModel> inventory = store.GetInventory();
+            // Assert that inventory is emtpy
+            Assert.Empty(inventory);
+        }
     }
 }
